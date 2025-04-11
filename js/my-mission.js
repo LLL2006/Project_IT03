@@ -7,10 +7,9 @@ document.addEventListener("DOMContentLoaded", function () {
   
     // Sự kiện sắp xếp
     sortSelect.addEventListener("change", function () {
-      const sortBy = this.value; // Lấy giá trị sắp xếp
+      const sortBy = this.value;
       renderTasks(projects, sortBy, searchInput.value.trim());
     });
-  
     // Sự kiện tìm kiếm
     searchInput.addEventListener("input", function () {
       const searchTerm = this.value.trim().toLowerCase();
@@ -86,7 +85,7 @@ document.addEventListener("DOMContentLoaded", function () {
     function renderTasks(projects, sortBy = "", searchTerm = "") {
       const tableBody = document.getElementById("task-table-body");
       tableBody.innerHTML = ""; // Xóa nội dung cũ
-  
+    
       // Duyệt qua từng dự án
       projects.forEach((project) => {
         if (project.tasks) {
@@ -99,66 +98,63 @@ document.addEventListener("DOMContentLoaded", function () {
             </td>
           `;
           tableBody.appendChild(projectRow);
-  
-          // Duyệt qua từng nhóm nhiệm vụ (To do, In Progress, Pending, Done)
-          Object.keys(project.tasks).forEach((group) => {
-            let tasks = [...project.tasks[group]]; // ✅ tạo bản sao để sắp xếp
-
-  // Tìm kiếm nhiệm vụ
-  if (searchTerm) {
-    tasks = tasks.filter((task) =>
-      task.name.toLowerCase().includes(searchTerm)
-    );
-  }
-
-  // Sắp xếp nhiệm vụ
-  if (sortBy === "priority") {
-    const priorityOrder = { "Cao": 1, "Trung bình": 2, "Thấp": 3 };
-    tasks.sort((a, b) => priorityOrder[a.priority] - priorityOrder[b.priority]);
-  } else if (sortBy === "deadline") {
-    tasks.sort((a, b) => new Date(a.endDate) - new Date(b.endDate));
-  }
     
-  
-            if (tasks.length > 0) {
-              tasks.forEach((task) => {
-                // Tạo hàng cho từng nhiệm vụ
-                const taskRow = document.createElement("tr");
-                taskRow.classList.add("task-row");
-                taskRow.innerHTML = `
-                  <td>${task.name}</td>
-                  <td class="center"><span class="priority ${
-                    task.priority === "Thấp"
-                      ? "priority-low"
-                      : task.priority === "Trung bình"
-                      ? "priority-medium"
-                      : task.priority === "Cao"
-                      ? "priority-high"
-                      : ""
-                  }">${task.priority}</span></td>
-                  <td class="center">${task.status} <img src="../assets/icons/Edit.png" alt="Edit" class="edit-btn" data-id="${task.id}" data-project-id="${project.id}"></td>
-                  <td class="time">${task.startDate}</td>
-                  <td class="time">${task.endDate}</td>
-                  <td class="center"><span class="progress ${
-                    task.progress === "Đúng tiến độ"
-                      ? "progress-on-schedule"
-                      : task.progress === "Có rủi ro"
-                      ? "progress-at-risk"
-                      : task.progress === "Trễ hạn"
-                      ? "progress-late"
-                      : ""
-                  }">${task.progress}</span></td>
-                `;
-                tableBody.appendChild(taskRow);
-              });
-            }
-          });
-  
+          // Gộp tất cả nhiệm vụ từ các trạng thái
+          let allTasks = Object.values(project.tasks).flat();
+    
+          // Tìm kiếm nhiệm vụ
+          if (searchTerm) {
+            allTasks = allTasks.filter((task) =>
+              task.name.toLowerCase().includes(searchTerm)
+            );
+          }
+    
+          // Sắp xếp nhiệm vụ
+          if (sortBy === "priority") {
+            const priorityOrder = { "Cao": 1, "Trung bình": 2, "Thấp": 3 };
+            allTasks.sort((a, b) => priorityOrder[a.priority] - priorityOrder[b.priority]);
+          } else if (sortBy === "deadline") {
+            allTasks.sort((a, b) => new Date(a.endDate) - new Date(b.endDate));
+          }
+    
+          // Hiển thị nhiệm vụ đã sắp xếp
+          if (allTasks.length > 0) {
+            allTasks.forEach((task) => {
+              const taskRow = document.createElement("tr");
+              taskRow.classList.add("task-row");
+              taskRow.innerHTML = `
+                <td>${task.name}</td>
+                <td class="center"><span class="priority ${
+                  task.priority === "Thấp"
+                    ? "priority-low"
+                    : task.priority === "Trung bình"
+                    ? "priority-medium"
+                    : task.priority === "Cao"
+                    ? "priority-high"
+                    : ""
+                }">${task.priority || "Không xác định"}</span></td>
+                <td class="center">${task.status} <img src="../assets/icons/Edit.png" alt=""></td>
+                <td class="time">${task.startDate || "Không xác định"}</td>
+                <td class="time">${task.endDate || "Không xác định"}</td>
+                <td class="center"><span class="progress ${
+                  task.progress === "Đúng tiến độ"
+                    ? "progress-on-schedule"
+                    : task.progress === "Có rủi ro"
+                    ? "progress-at-risk"
+                    : task.progress === "Trễ hạn"
+                    ? "progress-late"
+                    : ""
+                }">${task.progress || "Không xác định"}</span></td>
+              `;
+              tableBody.appendChild(taskRow);
+            });
+          }
+    
           // Gắn sự kiện toggle để ẩn/hiện nhiệm vụ của dự án
           projectRow.querySelector(".toggle-btn").addEventListener("click", function () {
             const isHidden = this.textContent === "▼";
             this.textContent = isHidden ? "▶" : "▼";
-  
+    
             let nextRow = projectRow.nextElementSibling;
             while (nextRow && nextRow.classList.contains("task-row")) {
               nextRow.style.display = isHidden ? "none" : "table-row";
@@ -167,11 +163,8 @@ document.addEventListener("DOMContentLoaded", function () {
           });
         }
       });
-  
+    
       // Gắn sự kiện cho các nút "Edit"
       attachEditEvent();
     }
   });
-
-  console.log("Sorted tasks:", allTasks);
-1

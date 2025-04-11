@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chi Tiết Dự Án</title>
+    <link rel="stylesheet" href="../css/reset.css" />
+    <link rel="stylesheet" href="../css/base.css" />
+    <link rel="stylesheet" href="../css/project-details.css" />
+  </head>
+  <body>
+    <header>
+      <div class="header-container">
+        <div class="logo">Quản Lý Dự Án</div>
+        <nav>
+          <a href="./project-management.html">Dự Án</a>
+        <a href="./my-mission.html">Nhiệm Vụ Của Tôi</a>
+        <a href="./login.html">Đăng Xuất</a>
+        </nav>
+      </div>
+    </header>
+    <main>
+      <div class="main-container">
+        <div class="container">
+          <div class="left">
+            <div class="project-details">
+              <h1></h1>
+              <p id="project-description"></p>
+              <button id="add-task-btn" class="add-task-btn">
+                + Thêm nhiệm vụ
+              </button>
+            </div>
+          </div>
+          <div class="right">
+            <div class="add-member">
+              <h2>Thành viên</h2>
+              <button id="add-member-btn">+ Thêm thành viên</button>
+            </div>
+            <div class="member-list">
+              <div class="member">
+                <div class="avatar avatar-1"></div>
+                <div class="info">
+                  <p></p>
+                  <span>Project Owner</span>
+                </div>
+              </div>
+              <div id="additional-members">
+                <!-- Thành viên mới sẽ được thêm tại đây -->
+              </div>
+              <div class="icon">
+                <img
+                  src="../assets/icons/Arrow/Button+BackgroundColor.png"
+                  id="open-member-list-modal"
+                  alt=""
+                />
+              </div>
+            </div>
+            <div class="filters">
+              <select id="sort-tasks" class="sort-by">
+                <option value="">Sắp xếp theo</option>
+                <option value="deadline">Sắp xếp theo hạn chót</option>
+                <option value="priority">Sắp xếp theo độ ưu tiên</option>
+              </select>
+              <input
+                type="text"
+                id="search-task"
+                placeholder="Tìm kiếm nhiệm vụ"
+              />
+            </div>
+          </div>
+        </div>
+        <!-- Modal Xác Nhận Xóa -->
+        <div id="delete-modal" class="modal">
+          <div class="modal-content">
+            <div class="header-modal">
+              <span class="close-btn"
+                ><img src="../assets/icons/Arrow/Vector.png" alt=""
+              /></span>
+              <h2>Xác nhận xóa</h2>
+            </div>
+            <hr class="hr-1" />
+            <div class="body-modal">
+              <p>Bạn chắc chắn muốn xóa dự án này?</p>
+            </div>
+            <hr class="hr-2" />
+            <div class="footer-modal">
+              <div class="modal-actions">
+                <button type="button" id="cancel-delete-btn" class="cancel-btn">
+                  Hủy
+                </button>
+                <button type="button" id="confirm-delete-btn">Xóa</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Modal Thêm Nhiệm Vụ -->
+        <div id="task-modal" class="modal">
+          <div class="modal-content">
+            <div class="header-modal">
+              <span class="close-btn">
+                <img src="../assets/icons/Arrow/Vector.png" alt="" />
+              </span>
+              <h2>Thêm/sửa nhiệm vụ</h2>
+            </div>
+            <form id="task-form">
+              <div class="body-modal">
+                <div class="form-group">
+                  <label for="task-name">Tên nhiệm vụ</label>
+                  <input
+                    type="text"
+                    id="task-name"
+                    placeholder="Nhập tên nhiệm vụ"
+                  />
+                  <span id="task-name-error" class="error-message"></span>
+                </div>
+
+                <div class="form-group">
+                  <label for="task-assignee">Người phụ trách</label>
+                  <select id="task-assignee">
+                    <option value="">Chọn người phụ trách</option>
+                  </select>
+                  <span id="task-assignee-error" class="error-message"></span>
+                </div>
+
+                <div class="form-group">
+                  <label for="task-status">Trạng thái</label>
+                  <select id="task-status">
+                    <option value="">Chọn trạng thái nhiệm vụ</option>
+                    <option value="To do">To do</option>
+                    <option value="In Progress">In Progress</option>
+                    <option value="Pending">Pending</option>
+                    <option value="Done">Done</option>
+                  </select>
+                  <span id="task-status-error" class="error-message"></span>
+                </div>
+
+                <div class="form-group">
+                  <label for="task-start-date">Ngày bắt đầu</label>
+                  <input type="date" id="task-start-date" />
+                  <span id="task-start-date-error" class="error-message"></span>
+                </div>
+
+                <div class="form-group">
+                  <label for="task-end-date">Hạn cuối</label>
+                  <input type="date" id="task-end-date" />
+                  <span id="task-end-date-error" class="error-message"></span>
+                </div>
+
+                <div class="form-group">
+                  <label for="task-priority">Độ ưu tiên</label>
+                  <select id="task-priority">
+                    <option value="">Chọn độ ưu tiên</option>
+                    <option value="Thấp">Thấp</option>
+                    <option value="Trung bình">Trung bình</option>
+                    <option value="Cao">Cao</option>
+                  </select>
+                  <span id="task-priority-error" class="error-message"></span>
+                </div>
+
+                <div class="form-group">
+                  <label for="task-progress">Tiến độ</label>
+                  <select id="task-progress">
+                    <option value="">Chọn tiến độ</option>
+                    <option value="Đúng tiến độ">Đúng tiến độ</option>
+                    <option value="Có rủi ro">Có rủi ro</option>
+                    <option value="Trễ hạn">Trễ hạn</option>
+                  </select>
+                  <span id="task-progress-error" class="error-message"></span>
+                </div>
+              </div>
+              <div class="footer-modal">
+                <div class="modal-actions">
+                  <button type="button" id="cancel-task-btn" class="cancel-btn">
+                    Hủy
+                  </button>
+                  <button type="submit" id="save-task-btn" class="save-btn">
+                    Lưu
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+        <!-- Modal Danh Sách Thành Viên -->
+        <div id="member-list-modal" class="modal">
+          <div class="modal-content">
+            <div class="header-modal">
+              <h2>Thành viên</h2>
+              <span class="close-btn" id="close-member-list-modal"
+                ><img src="../assets/icons/Arrow/Vector.png" alt=""
+              /></span>
+            </div>
+            <div class="body-modal">
+              <table class="member-table">
+                <thead>
+                  <tr>
+                    <th>Thành viên</th>
+                    <th>Vai trò</th>
+                  </tr>
+                </thead>
+                <tbody id="member-list">
+                  <!-- Danh sách thành viên sẽ được render tại đây -->
+                </tbody>
+              </table>
+            </div>
+            <div class="footer-modal">
+              <button class="cancel-btn" id="close-member-list-btn">
+                Đóng
+              </button>
+              <button class="save-btn" id="save-member-btn">Lưu</button>
+            </div>
+          </div>
+        </div>
+        <!-- Modal Thêm Thành Viên -->
+        <div id="add-member-modal" class="modal">
+          <div class="modal-content">
+            <div class="header-modal">
+              <h2>Thêm thành viên</h2>
+              <span class="close-btn" id="close-add-member-modal"
+                ><img src="../assets/icons/Arrow/Vector.png" alt=""
+              /></span>
+            </div>
+            <form id="add-member-form">
+              <div class="body-modal">
+                <div class="form-group">
+                  <label for="member-email">Email</label>
+                  <input
+                    type="email"
+                    id="member-email"
+                    placeholder="Nhập email thành viên"
+                  />
+                  <span id="member-email-error" class="error-message"></span>
+                </div>
+                <div class="form-group">
+                  <label for="member-role">Vai trò</label>
+                  <input type="text" id="member-role" />
+                  <span id="member-role-error" class="error-message"></span>
+                </div>
+              </div>
+              <div class="footer-modal">
+                <button
+                  type="button"
+                  class="cancel-btn"
+                  id="cancel-add-member-btn"
+                >
+                  Hủy
+                </button>
+                <button type="submit" class="save-btn">Lưu</button>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div class="content">
+          <div class="task-list">
+            <h2>Danh Sách Nhiệm Vụ</h2>
+            <table>
+              <thead>
+                <tr>
+                  <th>Tên Nhiệm Vụ</th>
+                  <th>Người Phụ Trách</th>
+                  <th>Ưu Tiên</th>
+                  <th>Ngày Bắt Đầu</th>
+                  <th>Hạn Chót</th>
+                  <th>Tiến độ</th>
+                  <th>Hành động</th>
+                </tr>
+              </thead>
+
+              <tbody id="task-table-body"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </main>
+    <footer>
+      <p>&copy; 2025 Quản Lý Dự Án Nhóm. All rights reserved.</p>
+    </footer>
+    <script src="../js/project-details.js"></script>
+    <script src="../js/auth.js"></script>
+  </body>
+</html>

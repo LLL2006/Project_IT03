@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Trang đăng nhập</title>
+    <link rel="stylesheet" href="../css/reset.css" />
+    <link rel="stylesheet" href="../css/base.css" />
+    <link rel="stylesheet" href="../css/login.css" />
+  </head>
+  <body>
+    <header>
+      <div class="namePage">Trang đăng nhập</div>
+    </header>
+    <div class="title">Đăng nhập</div>
+    <div class="container">
+      <div class="form-container">
+        <form id="login-form">
+          <label for="email">Email</label>
+          <input type="text" id="email" placeholder="Địa chỉ email" />
+          <span class="error-message" id="email-error"></span>
+          <label for="password">Mật khẩu</label>
+          <input type="password" id="password" placeholder="Mật khẩu" />
+          <span class="error-message" id="password-error"></span>
+          <button type="submit">Đăng nhập</button>
+          <p>Chưa có tài khoản? <a href="./register.html">Đăng ký</a></p>
+        </form>
+      </div>
+    </div>
+    <script src="../js/login.js"></script>
+    <script src="../js/auth.js"></script>
+  </body>
+</html>

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Trang đăng ký</title>
+    <link rel="stylesheet" href="../css/reset.css" />
+    <link rel="stylesheet" href="../css/base.css" />
+    <link rel="stylesheet" href="../css/register.css" />
+  </head>
+  <body>
+    <header><div class="namePage">Trang đăng ký</div></header>
+    <div class="title">Đăng ký</div>
+    <div class="container">
+      <div class="form-container">
+        <form id="register-form">
+          <div class="form-group">
+            <input type="text" id="full-name" placeholder="Họ và tên" />
+            <span class="error-message" id="full-name-error"></span>
+          </div>
+          <div class="form-group">
+            <input type="text" id="email" placeholder="Địa chỉ email" />
+            <span class="error-message" id="email-error"></span>
+          </div>
+          <div class="form-group">
+            <input type="password" id="password" placeholder="Mật khẩu" />
+            <span class="error-message" id="password-error"></span>
+          </div>
+          <div class="form-group">
+            <input
+              type="password"
+              id="confirm-password"
+              placeholder="Xác nhận mật khẩu"
+            />
+            <span class="error-message" id="confirm-password-error"></span>
+          </div>
+          <button type="submit">Đăng ký</button>
+          <p>Đã có tài khoản? <a href="./login.html">Đăng nhập</a></p>
+        </form>
+      </div>
+    </div>
+    <script src="../js/register.js"></script>
+    <script src="../js/auth.js"></script>
+  </body>
+</html>

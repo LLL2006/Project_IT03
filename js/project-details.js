@@ -1,11 +1,14 @@
 let members = JSON.parse(localStorage.getItem("members")) || [];
-let taskNameInput;
-let taskAssigneeSelect;
-let taskStatusSelect;
-let taskStartDateInput;
-let taskEndDateInput;
-let taskPrioritySelect;
-let taskProgressSelect;
+const taskModal = document.getElementById("task-modal");
+const taskNameInput = document.getElementById("task-name");
+const taskAssigneeSelect = document.getElementById("task-assignee");
+const taskStatusSelect = document.getElementById("task-status");
+const taskStartDateInput = document.getElementById("task-start-date");
+const taskEndDateInput = document.getElementById("task-end-date");
+const taskPrioritySelect = document.getElementById("task-priority");
+const taskProgressSelect = document.getElementById("task-progress");
+const cancelTaskBtn = document.getElementById("cancel-task-btn");
+const closeTaskBtn = taskModal.querySelector(".close-btn");
 const deleteModal = document.getElementById("delete-modal");
 const cancelDeleteBtn = document.getElementById("cancel-delete-btn");
 const confirmDeleteBtn = document.getElementById("confirm-delete-btn");
@@ -26,21 +29,9 @@ const additionalMembers = document.getElementById("additional-members");
 const memberList = document.getElementById("member-list");
 const addMemberForm = document.getElementById("add-member-form");
 
+
 document.addEventListener("DOMContentLoaded", function () {
-  const taskModal = document.getElementById("task-modal");
-  taskNameInput = document.getElementById("task-name");
-  taskAssigneeSelect = document.getElementById("task-assignee");
-  taskStatusSelect = document.getElementById("task-status");
-  taskStartDateInput = document.getElementById("task-start-date");
-  taskEndDateInput = document.getElementById("task-end-date");
-  taskPrioritySelect = document.getElementById("task-priority");
-  taskProgressSelect = document.getElementById("task-progress");
-  const cancelTaskBtn = document.getElementById("cancel-task-btn");
-  const closeTaskBtn = taskModal.querySelector(".close-btn");
-  const addMemberModal = document.getElementById("add-member-modal");
-  const memberListModal = document.getElementById("member-list-modal");
-  const addMemberForm = document.getElementById("add-member-form");
-  const memberList = document.getElementById("member-list");
+  
 
   // Lấy thông tin người dùng đã đăng nhập
   const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
@@ -412,16 +403,18 @@ document.addEventListener("DOMContentLoaded", function () {
 
     if (hasError) return;
 
-    // Thêm thành viên mới
-    members.push({ email, role });
-  saveMembersForProject(projectId, members); // Lưu danh sách thành viên vào dự án
-  addMemberToAdditionalMembers(email, role); // Thêm thành viên vào danh sách hiển thị
+// Thêm thành viên mới
+members.push({ email, role });
+saveMembersForProject(projectId, members);
+addMemberToAdditionalMembers(email, role);
 
-  renderMembers();
+// ✅ Reset form và ẩn modal
+addMemberForm.reset();
+addMemberModal.style.display = "none"; // <-- dòng quan trọng
 
-  // Đóng modal và reset form
-  addMemberModal.style.display = "none";
-  addMemberForm.reset();
+// Optional: log để kiểm tra
+console.log("Modal đã đóng sau khi lưu");
+
   });
 
   const openMemberListModalBtn = document.getElementById(
@@ -435,25 +428,26 @@ document.addEventListener("DOMContentLoaded", function () {
 
   memberList.addEventListener("click", function (e) {
     if (e.target.classList.contains("trash-icon")) {
-      const index = e.target.dataset.index;
-      const projectId = getProjectIdFromURL(); // Lấy id dự án từ URL
-      const projects = JSON.parse(localStorage.getItem("projects")) || [];
-      const project = projects.find((p) => p.id === parseInt(projectId, 10));
-  
-      if (project && project.members) {
-        project.members.splice(index, 1); // Xoá thành viên khỏi danh sách
-        localStorage.setItem("projects", JSON.stringify(projects)); // Lưu lại
-  
-        renderMembers(); // Cập nhật lại giao diện
+      const index = parseInt(e.target.dataset.index, 10);
+      if (!isNaN(index)) {
+        tempMembers.splice(index, 1); // Xoá trên mảng tạm
+        renderMembers(tempMembers);   // Render lại danh sách tạm
       }
     }
   });
   
+  
 
-  // Mở modal danh sách thành viên
+  let tempMembers = []; // Mảng tạm thời chứa danh sách thành viên
+
+  // Khi mở modal, gán tempMembers từ dữ liệu thật
   openMemberListModalBtn.addEventListener("click", function () {
+    const projectId = getProjectIdFromURL();
+    tempMembers = [...getMembersForProject(projectId)]; // Clone để không ảnh hưởng dữ liệu thật
+    renderMembers(tempMembers);
     memberListModal.style.display = "block";
   });
+  
 
   // Đóng modal danh sách thành viên
   closeMemberListModalBtn.addEventListener("click", function () {
@@ -466,42 +460,40 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Lưu thay đổi danh sách thành viên
   saveMemberBtn.addEventListener("click", function () {
-    const rows = document.querySelectorAll("#member-list tr");
-    const updatedMembers = []; // Danh sách thành viên mới
+      const rows = document.querySelectorAll("#member-list tr");
+      const updatedMembers = [];
   
-    rows.forEach((row) => {
-      const name = row.querySelector(".info p").textContent.trim();
-      const email = row.querySelector(".info span").textContent.trim();
-      const role = row.querySelector("td[contenteditable='true']").textContent.trim();
+      rows.forEach((row) => {
+        const name = row.querySelector(".info p")?.textContent?.trim();
+        const email = row.querySelector(".info span")?.textContent?.trim();
+        const role = row.querySelector("td[contenteditable='true']")?.textContent?.trim();
   
-      updatedMembers.push({ name, email, role });
-    });
+        if (email && role) {
+          updatedMembers.push({ name, email, role });
+        }
+      });
   
-    // Lấy projectId hiện tại từ URL hoặc biến global
-    const urlParams = new URLSearchParams(window.location.search);
-    const projectName = urlParams.get("projectName"); // Giả sử bạn đang dùng tên thay vì id
-    const projects = JSON.parse(localStorage.getItem("projects")) || [];
+      const projectId = getProjectIdFromURL();
+      const projects = JSON.parse(localStorage.getItem("projects")) || [];
+      const project = projects.find((p) => p.id === parseInt(projectId, 10));
   
-    const project = projects.find((p) => p.name === projectName); // Hoặc dùng id nếu có
-    if (project) {
-      project.members = updatedMembers;
+      if (project) {
+        project.members = updatedMembers;
+        localStorage.setItem("projects", JSON.stringify(projects));
+      }
   
-      // Cập nhật localStorage
-      localStorage.setItem("projects", JSON.stringify(projects));
-    }
+      // Đóng modal
+      memberListModal.style.display = "none";
   
-    // Cập nhật hiển thị
-    renderMembers();
+      // (Tuỳ chọn) Cập nhật lại danh sách hiển thị chính
+      renderMembers(updatedMembers);
   
-    // Đóng modal
-    memberListModal.style.display = "none";
   });
-  
 
   // Hiển thị danh sách nhiệm vụ khi tải trang
   renderProjectDetails();
   renderTasks();
-  renderMembers();
+
 });
 
 function normalizeStatus(status) {
@@ -512,14 +504,6 @@ function normalizeStatus(status) {
     done: "Done",
   };
   return statusMap[status.toLowerCase()] || status; // Trả về trạng thái đã chuẩn hóa
-}
-
-function getAssigneeNameById(assigneeId) {
-  const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
-  if (loggedInUser && loggedInUser.id === assigneeId) {
-    return loggedInUser.fullName; // Trả về tên của người dùng đã đăng nhập
-  }
-  return "Không xác định"; // Trả về giá trị mặc định nếu không tìm thấy
 }
 
 function getProjectFromURL() {
@@ -566,7 +550,7 @@ function renderTasks() {
         taskRow.classList.add("task-row", "hidden");
         taskRow.innerHTML = `
           <td>${task.name}</td>
-          <td class="center">${getAssigneeNameById(task.assignee)}</td>
+          <td class="center">${getAssigneeName(task.assignee)}</td>
           <td class="center"><span class="priority ${
             task.priority === "Thấp"
               ? "priority-low"
@@ -629,29 +613,30 @@ function renderProjectDetails() {
 
 function renderAssignees() {
   const taskAssigneeSelect = document.getElementById("task-assignee");
-  taskAssigneeSelect.innerHTML =
-    '<option value="">Chọn người phụ trách</option>'; // Reset danh sách
+  taskAssigneeSelect.innerHTML = '<option value="">Chọn người phụ trách</option>';
 
-  const project = getProjectFromURL(); // Lấy thông tin dự án từ URL
+  const project = getProjectFromURL();
+  const users = JSON.parse(localStorage.getItem("users")) || [];
 
   if (project && project.members) {
-    project.members.forEach((member) => {
+    project.members.forEach((member, index) => {
       const option = document.createElement("option");
-      option.value = member.id; // ID của người phụ trách
-      option.textContent = member.fullName; // Tên của người phụ trách
+
+      option.value = member.id ?? member.email ?? `member-${index}`;
+
+      // Lấy tên từ member hoặc từ users theo email
+      let displayName = member.name || member.fullName;
+      if (!displayName && member.email) {
+        const foundUser = users.find((user) => user.email === member.email);
+        displayName = foundUser?.name || foundUser?.fullName || member.email;
+      }
+
+      option.textContent = displayName || "Không tên";
       taskAssigneeSelect.appendChild(option);
     });
   }
-
-  // Thêm Project Owner vào danh sách
-  const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
-  if (loggedInUser) {
-    const ownerOption = document.createElement("option");
-    ownerOption.value = loggedInUser.id;
-    ownerOption.textContent = `${loggedInUser.fullName}`;
-    taskAssigneeSelect.appendChild(ownerOption);
-  }
 }
+
 
 // Hiển thị modal xóa
 function showDeleteModal(task, projectId) {
@@ -708,23 +693,18 @@ function deleteTask(taskId, projectId) {
   renderTasks();
 }
 
-function getAssigneeNameById(assigneeId) {
-  const project = getProjectFromURL(); // Lấy thông tin dự án từ URL
-  if (project && project.members) {
+function getAssigneeName(memberId) {
+  const project = getProjectFromURL();
+
+  if (project && Array.isArray(project.members)) {
     const member = project.members.find(
-      (m) => m.id === parseInt(assigneeId, 10)
+      (m) => parseInt(m.id) === parseInt(memberId)
     );
+    console.log("Found member:", member);
     if (member) {
-      return member.fullName; // Trả về tên của thành viên nếu tìm thấy
+      return member.name || getUserNameByEmail(member.email);
     }
   }
-
-  const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
-  if (loggedInUser && loggedInUser.id === parseInt(assigneeId, 10)) {
-    return loggedInUser.fullName; // Trả về tên của người dùng đã đăng nhập
-  }
-
-  return "Không xác định"; // Trả về giá trị mặc định nếu không tìm thấy
 }
 
 // Mở modal thêm/sửa nhiệm vụ
@@ -764,16 +744,25 @@ function closeTaskModal() {
 }
 
 // Hiển thị danh sách thành viên
-function renderMembers() {
+function renderMembers(members) {
   const memberList = document.getElementById("member-list");
   memberList.innerHTML = ""; // Xóa danh sách cũ
 
-  const projectId = getProjectIdFromURL(); // Lấy projectId từ URL
-  const members = getMembersForProject(projectId);
+  const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
+
+  // Gán role là "Project Owner" nếu chưa có
+  const owner = {
+    ...loggedInUser,
+    role: "Project Owner"
+  };
+
+  if (!members) {
+    members.unshift(owner);
+  }
 
   members.forEach((member, index) => {
-    const fullName = getUserNameByEmail(member.email);
-    const avatarText = getInitialsFromName(fullName); // avatar từ tên
+    const fullName = member.name || getUserNameByEmail(member.email);
+    const avatarText = getInitialsFromName(fullName);
 
     const memberRow = document.createElement("tr");
     const avatarHTML = `<div class="avatar">${avatarText}</div>`;
@@ -789,8 +778,11 @@ function renderMembers() {
         </div>
       </td>
       <td contenteditable="true">${member.role}</td>
-      <td><img src="../assets/icons/Trash.png" alt="" class="trash-icon" data-index="${index}"></td>
+      <td>
+        <img src="../assets/icons/Trash.png" alt="" class="trash-icon" data-index="${index}">
+      </td>
     `;
+
     memberList.appendChild(memberRow);
   });
 }
@@ -814,9 +806,6 @@ function getUserNameByEmail(email) {
   if (user) {
     return user.fullName;
   }
-
-  // Nếu không tìm thấy, trả về giá trị mặc định
-  return "Không xác định";
 }
 
 function addMemberToAdditionalMembers(email, role) {
@@ -883,7 +872,7 @@ function renderFilteredTasks(filteredTasks) {
         taskRow.classList.add("task-row");
         taskRow.innerHTML = `
           <td>${task.name}</td>
-          <td class="center">${getAssigneeNameById(task.assignee)}</td>
+          <td class="center">${getAssigneeName(task.assignee)}</td>
           <td class="center"><span class="priority ${
             task.priority === "Thấp"
               ? "priority-low"

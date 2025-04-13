@@ -774,7 +774,7 @@ function renderMembers() {
           </div>
         </div>
       </td>
-      <td>${member.role}</td>
+      <td contenteditable="true">${member.role}</td>
       <td><img src="../assets/icons/Trash.png" alt="" class="trash-icon" data-index="${index}"></td>
     `;
     memberList.appendChild(memberRow);

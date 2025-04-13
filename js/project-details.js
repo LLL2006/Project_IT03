@@ -415,6 +415,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // Thêm thành viên mới
     members.push({ email, role });
   saveMembersForProject(projectId, members); // Lưu danh sách thành viên vào dự án
+  addMemberToAdditionalMembers(email, role); // Thêm thành viên vào danh sách hiển thị
 
   renderMembers();
 
@@ -435,17 +436,19 @@ document.addEventListener("DOMContentLoaded", function () {
   memberList.addEventListener("click", function (e) {
     if (e.target.classList.contains("trash-icon")) {
       const index = e.target.dataset.index;
-
-      // Xóa thành viên khỏi mảng
-      members.splice(index, 1);
-
-      // Cập nhật localStorage
-      localStorage.setItem("members", JSON.stringify(members));
-
-      // Cập nhật danh sách hiển thị
-      renderMembers();
+      const projectId = getProjectIdFromURL(); // Lấy id dự án từ URL
+      const projects = JSON.parse(localStorage.getItem("projects")) || [];
+      const project = projects.find((p) => p.id === parseInt(projectId, 10));
+  
+      if (project && project.members) {
+        project.members.splice(index, 1); // Xoá thành viên khỏi danh sách
+        localStorage.setItem("projects", JSON.stringify(projects)); // Lưu lại
+  
+        renderMembers(); // Cập nhật lại giao diện
+      }
     }
   });
+  
 
   // Mở modal danh sách thành viên
   openMemberListModalBtn.addEventListener("click", function () {
@@ -464,25 +467,36 @@ document.addEventListener("DOMContentLoaded", function () {
   // Lưu thay đổi danh sách thành viên
   saveMemberBtn.addEventListener("click", function () {
     const rows = document.querySelectorAll("#member-list tr");
-    members = []; // Reset danh sách thành viên
-
+    const updatedMembers = []; // Danh sách thành viên mới
+  
     rows.forEach((row) => {
-      const name = row.querySelector(".info p").textContent;
-      const email = row.querySelector(".info span").textContent;
-      const role = row.querySelector("td[contenteditable='true']").textContent;
-
-      members.push({ name, email, role });
+      const name = row.querySelector(".info p").textContent.trim();
+      const email = row.querySelector(".info span").textContent.trim();
+      const role = row.querySelector("td[contenteditable='true']").textContent.trim();
+  
+      updatedMembers.push({ name, email, role });
     });
-
-    // Lưu danh sách thành viên vào localStorage
-    localStorage.setItem("members", JSON.stringify(members));
-
+  
+    // Lấy projectId hiện tại từ URL hoặc biến global
+    const urlParams = new URLSearchParams(window.location.search);
+    const projectName = urlParams.get("projectName"); // Giả sử bạn đang dùng tên thay vì id
+    const projects = JSON.parse(localStorage.getItem("projects")) || [];
+  
+    const project = projects.find((p) => p.name === projectName); // Hoặc dùng id nếu có
+    if (project) {
+      project.members = updatedMembers;
+  
+      // Cập nhật localStorage
+      localStorage.setItem("projects", JSON.stringify(projects));
+    }
+  
     // Cập nhật hiển thị
     renderMembers();
-
+  
     // Đóng modal
     memberListModal.style.display = "none";
   });
+  
 
   // Hiển thị danh sách nhiệm vụ khi tải trang
   renderProjectDetails();
@@ -808,13 +822,13 @@ function getUserNameByEmail(email) {
 function addMemberToAdditionalMembers(email, role) {
   const additionalMembers = document.getElementById("additional-members");
 
-  // Lấy tên user bằng email
-  const userName = getUserNameByEmail(email);
-
-  if (userName === "Không xác định") {
-    console.error("Không tìm thấy người dùng với email:", email);
+  // Nếu đã có ít nhất 1 thành viên, không thêm nữa
+  if (additionalMembers.children.length > 0) {
     return;
   }
+
+  // Lấy tên user bằng email
+  const userName = getUserNameByEmail(email);
 
   // Tạo avatar từ tên
   const initials = userName
@@ -836,6 +850,7 @@ function addMemberToAdditionalMembers(email, role) {
   // Thêm thành viên vào "additional-members"
   additionalMembers.appendChild(memberDiv);
 }
+
 
 function getInitialsFromName(name) {
   if (!name) return "?";
@@ -960,17 +975,21 @@ function getTasksForProject(projectId) {
 
 function saveMembersForProject(projectId, members) {
   const projects = JSON.parse(localStorage.getItem("projects")) || [];
-  const project = projects.find((p) => p.id === parseInt(projectId, 10));
+  const index = projects.findIndex((p) => p.id === Number(projectId));
 
-  if (project) {
-    project.members = members; // Gán danh sách thành viên vào dự án
-    localStorage.setItem("projects", JSON.stringify(projects)); // Lưu lại toàn bộ danh sách dự án
+  if (index !== -1) {
+    // Gán lại danh sách thành viên
+    projects[index].members = members;
+
+    // Lưu lại toàn bộ danh sách dự án vào localStorage
+    localStorage.setItem("projects", JSON.stringify(projects));
   }
 }
 
+
 function getMembersForProject(projectId) {
   const projects = JSON.parse(localStorage.getItem("projects")) || [];
-  const project = projects.find((p) => p.id === parseInt(projectId, 10));
+  const project = projects.find((p) => p.id === Number(projectId));
 
-  return project?.members || [];
+  return project?.members ?? []; // Trả về [] nếu không có
 }

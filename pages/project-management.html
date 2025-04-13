@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quản Lý Dự Án</title>
+    <link rel="stylesheet" href="../css/reset.css" />
+    <link rel="stylesheet" href="../css/base.css" />
+    <link rel="stylesheet" href="../css/project-management.css" />
+  </head>
+  <body>
+    <header>
+      <div class="header-container">
+        <div class="logo">Quản Lý Dự Án</div>
+        <nav>
+          <a href="./project-management.html">Dự Án</a>
+        <a href="./my-mission.html">Nhiệm Vụ Của Tôi</a>
+        <a href="./login.html">Đăng Xuất</a>
+        </nav>
+      </div>
+    </header>
+    <main>
+      <div class="content">
+        <h1>Quản Lý Dự Án Nhóm</h1>
+        <div class="addSearch">
+          <button class="add-project-btn">+ Thêm Dự Án</button>
+          <input
+            type="text"
+            class="search-input"
+            placeholder="Tìm kiếm dự án"
+          />
+        </div>
+        <div class="projectList">Danh Sách Dự Án</div>
+        <!-- Modal Thêm/Sửa Dự Án -->
+        <div id="project-modal" class="modal">
+          <div class="modal-content">
+            <div class="header-modal">
+              <span class="close-btn"
+                ><img src="../assets/icons/Arrow/Vector.png" alt=""
+              /></span>
+              <h2>Thêm/Sửa Dự Án</h2>
+            </div>
+            <hr class="hr-1" />
+            <form id="project-form">
+              <div class="body-modal">
+                <label for="project-name">Tên dự án</label>
+                <input type="text" id="project-name" />
+                <span id="project-name-error" class="error-message"></span>
+                <br />
+                <label for="project-description">Mô tả dự án</label>
+                <textarea id="project-description"></textarea>
+                <span
+                  id="project-description-error"
+                  class="error-message"
+                ></span>
+              </div>
+              <hr class="hr-2" />
+              <div class="footer-modal">
+                <div class="modal-actions">
+                  <button type="button" id="cancel-btn" class="cancel-btn">
+                    Hủy
+                  </button>
+                  <button type="submit" id="save-btn" class="save-btn">
+                    Lưu
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+        <!-- Modal Xác Nhận Xóa -->
+        <div id="delete-modal" class="modal">
+          <div class="modal-content">
+            <div class="header-modal">
+              <span class="close-btn"
+                ><img src="../assets/icons/Arrow/Vector.png" alt=""
+              /></span>
+              <h2>Xác nhận xóa</h2>
+            </div>
+            <hr class="hr-1" />
+            <div class="body-modal">
+              <p>Bạn chắc chắn muốn xóa dự án này?</p>
+            </div>
+            <hr class="hr-2" />
+            <div class="footer-modal">
+              <div class="modal-actions">
+                <button type="button" id="cancel-delete-btn" class="cancel-btn">
+                  Hủy
+                </button>
+                <button
+                  type="button"
+                  id="confirm-delete-btn"
+                  class="delete-btn"
+                >
+                  Xóa
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Danh Sách Dự Án -->
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Tên Dự Án</th>
+              <th>Hành Động</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+        <!-- Phân Trang -->
+        <div class="pagination">
+          <button id="btnPrev" class="page-btn prev-btn">
+            <ion-icon name="chevron-back-outline"></ion-icon>
+          </button>
+          <div id="btnPages"></div>
+          <button id="btnNext" class="page-btn next-btn">
+            <ion-icon name="chevron-forward-outline"></ion-icon>
+          </button>
+        </div>
+      </div>
+    </main>
+    <footer>
+      <p>&copy; 2025 Team management. All rights reserved.</p>
+    </footer>
+    <script src="../js/project-management.js"></script>
+    <script src="../js/auth.js"></script>
+    <script
+      type="module"
+      src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"
+    ></script>
+    <script
+      nomodule
+      src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"
+    ></script>
+  </body>
+</html>

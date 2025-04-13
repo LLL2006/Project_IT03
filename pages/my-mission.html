@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quản Lý Nhiệm Vụ</title>
+  <link rel="stylesheet" href="../css/my-misson.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Quản Lý Nhiệm Vụ</h1>
+      <nav>
+        <a href="./project-management.html">Dự Án</a>
+        <a href="./my-mission.html">Nhiệm Vụ Của Tôi</a>
+        <a href="./login.html">Đăng Xuất</a>
+      </nav>
+    </header>
+
+    <main>
+      <div class="task-header">
+        <h2>Quản lý nhiệm vụ</h2>
+        <div class="task-controls">
+          <select id="sort-tasks" class="sort-select">
+            <option value="">Sắp xếp theo</option>
+            <option value="priority">Độ ưu tiên</option>
+            <option value="deadline">Hạn chót</option>
+          </select>
+          <input type="text" id="search-task" placeholder="Tìm kiếm nhiệm vụ">
+          <div id="update-status-modal" class="modal">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h2>Cập nhật trạng thái</h2>
+                <span class="close-btn" id="close-update-modal"><img src="../assets/icons/Arrow/Vector.png" alt=""></span>
+              </div>
+              <div class="modal-body">
+                <p>Xác nhận cập nhật trạng thái nhiệm vụ</p>
+              </div>
+              <div class="modal-footer">
+                <button type="button" id="cancel-update-btn" class="btn btn-secondary">Hủy</button>
+                <button type="button" id="confirm-update-btn" class="btn btn-primary">Xác nhận</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="content">
+        <div class="task-list">
+          <h2>Danh Sách Nhiệm Vụ</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>Tên Nhiệm Vụ</th>
+                <th>Độ Ưu Tiên</th>
+                <th>Trạng thái</th>
+                <th>Ngày Bắt Đầu</th>
+                <th>Hạn Chót</th>
+                <th>Tiến độ</th>
+              </tr>
+            </thead>
+
+            <tbody id="task-table-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+
+    <footer>
+      <p>&copy; 2025 Quản Lý Dự Án Nhóm. All rights reserved.</p>
+    </footer>
+  </div>
+  <script src="../js/auth.js"></script>
+  <script src="../js/my-mission.js"></script>
+</body>
+</html>

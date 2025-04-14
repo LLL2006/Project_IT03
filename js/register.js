@@ -25,33 +25,33 @@ document.addEventListener("DOMContentLoaded", function () {
     let isValid = true;
 
     if (!fullNameInput.value.trim()) {
-      fullNameError.textContent = "Họ và tên không được để trống.";
+      fullNameError.textContent = "Họ và tên không được để trống";
       isValid = false;
     }
 
     if (!emailInput.value.trim()) {
-      emailError.textContent = "Email không được để trống.";
+      emailError.textContent = "Email không được để trống";
       isValid = false;
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailInput.value)) {
-      emailError.textContent = "Email không đúng định dạng.";
+      emailError.textContent = "Email không đúng định dạng";
       isValid = false;
     }
 
     if (!passwordInput.value.trim()) {
-      passwordError.textContent = "Mật khẩu không được để trống.";
+      passwordError.textContent = "Mật khẩu không được để trống";
       isValid = false;
     } else if (passwordInput.value.length < 8) {
-      passwordError.textContent = "Mật khẩu phải có tối thiểu 8 ký tự.";
+      passwordError.textContent = "Mật khẩu phải có tối thiểu 8 ký tự";
       isValid = false;
     }
 
     if (!confirmPasswordInput.value.trim()) {
       confirmPasswordError.textContent =
-        "Mật khẩu xác nhận không được để trống.";
+        "Mật khẩu xác nhận không được để trống";
       isValid = false;
     } else if (confirmPasswordInput.value !== passwordInput.value) {
       confirmPasswordError.textContent =
-        "Mật khẩu xác nhận phải trùng với mật khẩu.";
+        "Mật khẩu xác nhận phải trùng với mật khẩu";
       isValid = false;
     }
 
@@ -62,7 +62,7 @@ document.addEventListener("DOMContentLoaded", function () {
         (user) => user.email === emailInput.value.trim()
       );
       if (isEmailExist) {
-        emailError.textContent = "Email đã được sử dụng.";
+        emailError.textContent = "Email đã được sử dụng";
         return;
       }
 

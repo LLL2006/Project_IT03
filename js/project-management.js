@@ -149,7 +149,7 @@ function renderProjects(page = 1) {
   tbody.innerHTML = "";
 
   if (paginatedProjects.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="3">Không có dự án nào để hiển thị.</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="3">Không có dự án nào để hiển thị</td></tr>`;
     return;
   }
 
@@ -223,25 +223,25 @@ function validateProject(name, desc, projects, editingId = null) {
   clearErrors();
 
   if (!name) {
-    projectNameError.textContent = "Tên dự án không được để trống.";
+    projectNameError.textContent = "Tên dự án không được để trống";
     projectNameInput.classList.add("input-error");
     valid = false;
   } else if (name.length < 5 || name.length > 50) {
-    projectNameError.textContent = "Tên dự án phải từ 5 đến 50 ký tự.";
+    projectNameError.textContent = "Tên dự án phải từ 5 đến 50 ký tự";
     projectNameInput.classList.add("input-error");
     valid = false;
   } else if (projects.some((p) => p.name === name && p.id !== editingId)) {
-    projectNameError.textContent = "Tên dự án đã tồn tại.";
+    projectNameError.textContent = "Tên dự án đã tồn tại";
     projectNameInput.classList.add("input-error");
     valid = false;
   }
 
   if (!desc) {
-    projectDescriptionError.textContent = "Mô tả dự án không được để trống.";
+    projectDescriptionError.textContent = "Mô tả dự án không được để trống";
     projectDescriptionInput.classList.add("input-error");
     valid = false;
   } else if (desc.length < 10 || desc.length > 200) {
-    projectDescriptionError.textContent = "Mô tả dự án phải từ 10 đến 200 ký tự.";
+    projectDescriptionError.textContent = "Mô tả dự án phải từ 10 đến 200 ký tự";
     projectDescriptionInput.classList.add("input-error");
     valid = false;
   }

@@ -46,6 +46,9 @@ document.addEventListener("DOMContentLoaded", function () {
   // Gắn sự kiện cho nút xác nhận
   confirmUpdateBtn.addEventListener("click", function () {
     if (currentTask && currentProject) {
+      // Nếu task đã là "Done", không cho chuyển tiếp
+      if (currentTask.status === "Done") return;
+
       const projects = JSON.parse(localStorage.getItem("projects")) || [];
       const projectIndex = projects.findIndex(
         (p) => p.id === currentProject.id
@@ -70,7 +73,7 @@ document.addEventListener("DOMContentLoaded", function () {
         if (!project.tasks[nextStatus]) {
           project.tasks[nextStatus] = [];
         }
-        project.tasks[nextStatus].push(currentTask);
+        project.tasks[nextStatus].unshift(currentTask);
         localStorage.setItem("projects", JSON.stringify(projects));
         renderTasks(projects, sortSelect.value, searchInput.value.trim());
       }

@@ -15,19 +15,19 @@ document.addEventListener("DOMContentLoaded", function () {
     let isValid = true;
 
     if (!emailInput.value.trim()) {
-      emailError.textContent = "Email không được để trống.";
+      emailError.textContent = "Email không được để trống";
       isValid = false;
     }
 
     if (!passwordInput.value.trim()) {
-      passwordError.textContent = "Mật khẩu không được để trống.";
+      passwordError.textContent = "Mật khẩu không được để trống";
       isValid = false;
     }
 
     if (isValid) {
       const users = JSON.parse(localStorage.getItem("users")) || [];
       if (users.length === 0) {
-        emailError.textContent = "Không có tài khoản nào được đăng ký.";
+        emailError.textContent = "Không có tài khoản nào được đăng ký";
         return;
       }
 
@@ -43,7 +43,7 @@ document.addEventListener("DOMContentLoaded", function () {
         // Chuyển hướng đến trang quản lý dự án
         window.location.href = "../pages/project-management.html";
       } else {
-        emailError.textContent = "Email hoặc mật khẩu không đúng.";
+        emailError.textContent = "Email hoặc mật khẩu không đúng";
       }
     }
   });

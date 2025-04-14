@@ -138,10 +138,6 @@ document.addEventListener("DOMContentLoaded", function () {
     e.preventDefault();
 
     const projectId = getProjectIdFromURL(); // Lấy projectId từ URL
-    if (!projectId) {
-      alert("Không tìm thấy dự án. Vui lòng kiểm tra lại.");
-      return;
-    }
     const tasks = getTasksForProject(projectId);
 
     // Lấy giá trị từ các trường
@@ -174,54 +170,54 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Kiểm tra tên nhiệm vụ
     if (!taskName) {
-      taskNameError.textContent = "Tên nhiệm vụ không được để trống.";
+      taskNameError.textContent = "Tên nhiệm vụ không được để trống";
       hasError = true;
     } else if (taskName.length < 5 || taskName.length > 50) {
-      taskNameError.textContent = "Tên nhiệm vụ phải từ 5 đến 50 ký tự.";
+      taskNameError.textContent = "Tên nhiệm vụ phải từ 5 đến 50 ký tự";
       hasError = true;
     }
 
     // Kiểm tra người phụ trách
     if (!taskAssignee) {
-      taskAssigneeError.textContent = "Vui lòng chọn người phụ trách.";
+      taskAssigneeError.textContent = "Vui lòng chọn người phụ trách";
       hasError = true;
     }
 
     // Kiểm tra trạng thái
     if (!taskStatus) {
-      taskStatusError.textContent = "Vui lòng chọn trạng thái nhiệm vụ.";
+      taskStatusError.textContent = "Vui lòng chọn trạng thái nhiệm vụ";
       hasError = true;
     }
 
     // Kiểm tra ngày bắt đầu
     const today = new Date().toISOString().split("T")[0];
     if (!taskStartDate) {
-      taskStartDateError.textContent = "Ngày bắt đầu không được để trống.";
+      taskStartDateError.textContent = "Ngày bắt đầu không được để trống";
       hasError = true;
     } else if (taskStartDate <= today) {
       taskStartDateError.textContent =
-        "Ngày bắt đầu phải lớn hơn ngày hiện tại.";
+        "Ngày bắt đầu phải lớn hơn ngày hiện tại";
       hasError = true;
     }
 
     // Kiểm tra hạn chót
     if (!taskEndDate) {
-      taskEndDateError.textContent = "Hạn chót không được để trống.";
+      taskEndDateError.textContent = "Hạn chót không được để trống";
       hasError = true;
     } else if (taskEndDate <= taskStartDate) {
-      taskEndDateError.textContent = "Hạn chót phải lớn hơn ngày bắt đầu.";
+      taskEndDateError.textContent = "Hạn chót phải lớn hơn ngày bắt đầu";
       hasError = true;
     }
 
     // Kiểm tra độ ưu tiên
     if (!taskPriority) {
-      taskPriorityError.textContent = "Vui lòng chọn độ ưu tiên.";
+      taskPriorityError.textContent = "Vui lòng chọn độ ưu tiên";
       hasError = true;
     }
 
     // Kiểm tra tiến độ
     if (!taskProgress) {
-      taskProgressError.textContent = "Vui lòng chọn tiến độ.";
+      taskProgressError.textContent = "Vui lòng chọn tiến độ";
       hasError = true;
     }
 
@@ -335,10 +331,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Kiểm tra email
     if (!email) {
-      emailError.textContent = "Email không được để trống.";
+      emailError.textContent = "Email không được để trống";
       hasError = true;
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      emailError.textContent = "Email không đúng định dạng.";
+      emailError.textContent = "Email không đúng định dạng";
       hasError = true;
     } else {
       // Kiểm tra email có tồn tại trong danh sách users không
@@ -347,20 +343,20 @@ document.addEventListener("DOMContentLoaded", function () {
 
       if (!user) {
         emailError.textContent =
-          "Email không tồn tại trong danh sách người dùng.";
+          "Email không tồn tại trong danh sách người dùng";
         hasError = true;
       }
     }
 
     // Kiểm tra vai trò
     if (!role) {
-      roleError.textContent = "Vai trò không được để trống.";
+      roleError.textContent = "Vai trò không được để trống";
       hasError = true;
     }
 
     // Kiểm tra thành viên đã tồn tại
     if (members.some((member) => member.email === email)) {
-      emailError.textContent = "Thành viên đã tồn tại.";
+      emailError.textContent = "Thành viên đã tồn tại";
       hasError = true;
     }
 
@@ -458,8 +454,8 @@ function normalizeStatus(status) {
   const statusMap = {
     "to-do": "To do",
     "in-progress": "In Progress",
-    pending: "Pending",
-    done: "Done",
+    "pending": "Pending",
+    "done": "Done",
   };
   return statusMap[status.toLowerCase()] || status; // Trả về trạng thái đã chuẩn hóa
 }
@@ -875,8 +871,8 @@ function getTasksForProject(projectId) {
     project?.tasks || {
       "To do": [],
       "In Progress": [],
-      Pending: [],
-      Done: [],
+      "Pending": [],
+      "Done": [],
     }
   );
 }

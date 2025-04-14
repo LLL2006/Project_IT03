@@ -353,17 +353,17 @@ footer {
   letter-spacing: 0%;
 }
 
-#delete-modal .cancel-btn{
+#delete-modal .cancel-btn {
   width: 58px;
   height: 37px;
   border-radius: 8px;
   border: none;
-  background-color: #6C757D;
-font-weight: 500;
-font-size: 16px;
-line-height: 24px;
-letter-spacing: 0%;
-color: white;
+  background-color: #6c757d;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 24px;
+  letter-spacing: 0%;
+  color: white;
 }
 .header-modal {
   padding-top: 16px;
@@ -633,7 +633,7 @@ color: white;
   gap: 10px;
 }
 
-#add-member-modal .footer-modal  .save-btn {
+#add-member-modal .footer-modal .save-btn {
   background-color: #007bff;
   color: #fff;
   border: none;
@@ -644,7 +644,7 @@ color: white;
   margin-right: 24px;
 }
 
-#add-member-modal input{
+#add-member-modal input {
   width: 432px;
   height: 44px;
   border-radius: 8px;
@@ -655,23 +655,23 @@ color: white;
 
 #add-member-modal input::placeholder {
   padding-left: 4px;
-font-weight: 400;
-font-size: 16px;
-line-height: 24px;
-letter-spacing: 0%;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 24px;
+  letter-spacing: 0%;
 }
 
 #add-member-modal .error-message {
   color: red;
   margin-top: -30px;
-font-weight: 400;
-font-size: 10px;
-line-height: 24px;
-letter-spacing: 0%;
-vertical-align: middle;
+  font-weight: 400;
+  font-size: 10px;
+  line-height: 24px;
+  letter-spacing: 0%;
+  vertical-align: middle;
 }
 
-#add-member-modal .cancel-btn{
+#add-member-modal .cancel-btn {
   background-color: #ccc;
   color: #000;
   border: none;
@@ -748,13 +748,12 @@ vertical-align: middle;
   padding: 16px;
 }
 
-#member-list-modal th{
-font-weight: 400;
-font-size: 20px;
-line-height: 24px;
-letter-spacing: 0px;
-text-align: center;
-
+#member-list-modal th {
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 24px;
+  letter-spacing: 0px;
+  text-align: center;
 }
 
 #member-list-modal .close-btn {
@@ -768,11 +767,11 @@ text-align: center;
 }
 
 #member-list-modal .body-modal {
-width: 598px;
-height: 401px;
+  width: 598px;
+  height: 401px;
 }
 
-#member-list-modal .header-modal{
+#member-list-modal .header-modal {
   width: 598px;
   height: 63px;
   border-bottom: 1px solid #dee2e6;
@@ -782,40 +781,39 @@ height: 401px;
   width: 598px;
   height: 63px;
   border-top: 1px solid #dee2e6;
-  
 }
 
-#close-member-list-btn{
+#close-member-list-btn {
   width: 64px;
-height: 38px;
-border-radius: 6px;
-font-weight: 400;
-font-size: 16px;
-line-height: 24px;
-letter-spacing: 0px;
-text-align: center;
-background-color: #6C757D;
-color: #ffffff;
-border: none;
-margin-right: 20px;
-margin-top: 18px;
-margin-left: 433px;
-cursor: pointer;
+  height: 38px;
+  border-radius: 6px;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 24px;
+  letter-spacing: 0px;
+  text-align: center;
+  background-color: #6c757d;
+  color: #ffffff;
+  border: none;
+  margin-right: 20px;
+  margin-top: 18px;
+  margin-left: 433px;
+  cursor: pointer;
 }
 
-#save-member-btn{
+#save-member-btn {
   width: 54px;
   height: 38px;
   border-radius: 6px;
-font-weight: 400;
-font-size: 16px;
-line-height: 24px;
-letter-spacing: 0px;
-text-align: center;
-background-color: #0D6EFD;
-color: #ffffff;
-border: none;
-cursor: pointer;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 24px;
+  letter-spacing: 0px;
+  text-align: center;
+  background-color: #0d6efd;
+  color: #ffffff;
+  border: none;
+  cursor: pointer;
 }
 
 .trash-icon {
@@ -823,4 +821,3 @@ cursor: pointer;
   font-size: 20px;
   cursor: pointer;
 }
-

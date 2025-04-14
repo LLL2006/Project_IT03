@@ -38,11 +38,9 @@ document.addEventListener("DOMContentLoaded", function () {
       );
 
       if (user) {
-        // Lưu trạng thái đăng nhập vào localStorage
         localStorage.setItem("isLoggedIn", "true");
-        localStorage.setItem("loggedInUser", JSON.stringify(user)); // Lưu thông tin người dùng nếu cần
-
-        // Điều hướng sang trang quản lý dự án
+        localStorage.setItem("loggedInUser", JSON.stringify(user));
+        // Chuyển hướng đến trang quản lý dự án
         window.location.href = "../pages/project-management.html";
       } else {
         emailError.textContent = "Email hoặc mật khẩu không đúng.";

@@ -79,13 +79,13 @@ main {
   flex-direction: column;
 }
 
-.task-header h2{
-font-weight: 600;
-font-size: 23.47px;
-line-height: 28.8px;
-letter-spacing: 0px;
-color: #212529;
-margin-bottom: 8px;
+.task-header h2 {
+  font-weight: 600;
+  font-size: 23.47px;
+  line-height: 28.8px;
+  letter-spacing: 0px;
+  color: #212529;
+  margin-bottom: 8px;
 }
 
 .task-controls {
@@ -95,14 +95,14 @@ margin-bottom: 8px;
   margin-bottom: 16px;
 }
 
-select{
+select {
   padding: 6px 12px;
-  border: 1px solid #DEE2E6;
+  border: 1px solid #dee2e6;
   border-radius: 6px;
 }
 
-input{
-  border: 1px solid #DEE2E6;
+input {
+  border: 1px solid #dee2e6;
   border-radius: 6px;
 }
 
@@ -143,8 +143,6 @@ input::placeholder {
   font-weight: bold;
 }
 
-
-
 .priority-low {
   background-color: #0dcaf0;
   color: #fff;
@@ -168,7 +166,6 @@ input::placeholder {
   font-size: 11.12px;
   padding: 2px 8px;
 }
-
 
 .progress-on-schedule {
   font-size: 11.53px;
@@ -194,24 +191,24 @@ input::placeholder {
   border-radius: 6px;
 }
 
-.center{
+.center {
   text-align: center;
 }
 
-.time{
+.time {
   text-align: center;
-  color: #0D6EFD;
+  color: #0d6efd;
 }
 
 .project-header {
-font-weight: 700;
-font-size: 16.11px;
-line-height: 20px;
-letter-spacing: 0px;
-color: #212529;
+  font-weight: 700;
+  font-size: 16.11px;
+  line-height: 20px;
+  letter-spacing: 0px;
+  color: #212529;
 }
 
-.toggle-btn{
+.toggle-btn {
   cursor: pointer;
 }
 
@@ -234,7 +231,7 @@ color: #212529;
   margin-right: auto;
   border: 1px solid #888;
   width: 480px;
-height: 230px;
+  height: 230px;
   border-radius: 8px;
   text-align: center;
 }
@@ -249,11 +246,11 @@ height: 230px;
 .modal-header h2 {
   margin-left: 16px;
   margin-top: 16px;
-font-weight: 500;
-font-size: 23.3px;
-line-height: 30px;
-letter-spacing: 0px;
-vertical-align: middle;
+  font-weight: 500;
+  font-size: 23.3px;
+  line-height: 30px;
+  letter-spacing: 0px;
+  vertical-align: middle;
 }
 
 .modal-header .close-btn {
@@ -261,16 +258,15 @@ vertical-align: middle;
 }
 
 .modal-body {
-height: 85px;
-border-bottom: 1px solid #DEE2E6;
-border-top: 1px solid #DEE2E6;
-padding-top: 22px;
-padding-left: 14px;
-font-weight: 400;
-font-size: 16px;
-line-height: 24px;
-letter-spacing: 0%;
-
+  height: 85px;
+  border-bottom: 1px solid #dee2e6;
+  border-top: 1px solid #dee2e6;
+  padding-top: 22px;
+  padding-left: 14px;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 24px;
+  letter-spacing: 0%;
 }
 
 .modal-footer {
@@ -279,33 +275,31 @@ letter-spacing: 0%;
   gap: 23px;
 }
 
-
-
 .btn-secondary {
-  background-color: #6C757D;
-  color: #FFFFFF;
+  background-color: #6c757d;
+  color: #ffffff;
   padding: 6.5px 13.5px;
   border: none;
   border-radius: 8px;
-font-weight: 500;
-font-size: 16px;
-line-height: 24px;
-letter-spacing: 0%;
-margin-top: 37px;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 24px;
+  letter-spacing: 0%;
+  margin-top: 37px;
 }
 
 .btn-primary {
   background-color: #007bff;
-  color: #FFFFFF;
+  color: #ffffff;
   border: none;
   border-radius: 8px;
   padding: 6.5px 12.5px;
-font-weight: 500;
-font-size: 16px;
-line-height: 24px;
-letter-spacing: 0%;
-margin-top: 37px;
-margin-right: 24px;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 24px;
+  letter-spacing: 0%;
+  margin-top: 37px;
+  margin-right: 24px;
 }
 
 .close-btn {
@@ -314,6 +308,6 @@ margin-right: 24px;
   cursor: pointer;
 }
 
-img{
+img {
   cursor: pointer;
 }

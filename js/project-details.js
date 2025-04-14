@@ -29,11 +29,7 @@ const additionalMembers = document.getElementById("additional-members");
 const memberList = document.getElementById("member-list");
 const addMemberForm = document.getElementById("add-member-form");
 
-
 document.addEventListener("DOMContentLoaded", function () {
-  
-
-  // Lấy thông tin người dùng đã đăng nhập
   const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
 
   if (loggedInUser) {
@@ -49,58 +45,57 @@ document.addEventListener("DOMContentLoaded", function () {
       .join("");
   }
 
-  document.getElementById("sort-tasks").addEventListener("change", function (e) {
-    const sortBy = e.target.value; // Lấy giá trị sắp xếp
-    const projectId = getProjectIdFromURL(); // Lấy projectId từ URL
-    const tasks = getTasksForProject(projectId); // Lấy danh sách nhiệm vụ từ dự án
-  
-    if (!sortBy) {
-      renderTasks(); // Nếu không chọn tiêu chí, hiển thị danh sách gốc
-      return;
-    }
-  
-    // Clone lại dữ liệu nhiệm vụ để không ảnh hưởng tasks gốc
-    const sortedTasks = JSON.parse(JSON.stringify(tasks));
-  
-    // Sắp xếp nhiệm vụ trong từng nhóm
-    Object.keys(sortedTasks).forEach((group) => {
-      sortedTasks[group].sort((a, b) => {
-        if (sortBy === "priority") {
-          // Sắp xếp theo độ ưu tiên
-          const priorityOrder = { Cao: 1, "Trung bình": 2, Thấp: 3 };
-          return priorityOrder[a.priority] - priorityOrder[b.priority];
-        } else if (sortBy === "deadline") {
-          // Sắp xếp theo hạn chót
-          return new Date(a.endDate) - new Date(b.endDate);
-        }
+  document
+    .getElementById("sort-tasks")
+    .addEventListener("change", function (e) {
+      const sortBy = e.target.value; // Lấy giá trị sắp xếp
+      const projectId = getProjectIdFromURL(); // Lấy projectId từ URL
+      const tasks = getTasksForProject(projectId); // Lấy danh sách nhiệm vụ từ dự án
+
+      if (!sortBy) {
+        renderTasks(); // Nếu không chọn tiêu chí, hiển thị danh sách gốc
+        return;
+      }
+
+      const sortedTasks = JSON.parse(JSON.stringify(tasks));
+
+      // Sắp xếp nhiệm vụ trong từng nhóm
+      Object.keys(sortedTasks).forEach((group) => {
+        sortedTasks[group].sort((a, b) => {
+          if (sortBy === "priority") {
+            const priorityOrder = { Cao: 1, "Trung bình": 2, Thấp: 3 };
+            return priorityOrder[a.priority] - priorityOrder[b.priority];
+          } else if (sortBy === "deadline") {
+            return new Date(a.endDate) - new Date(b.endDate);
+          }
+        });
       });
+
+      renderFilteredTasks(sortedTasks);
     });
-  
-    // Gọi hàm render sau khi sắp xếp
-    renderFilteredTasks(sortedTasks);
-  });
-  
-  document.getElementById("search-task").addEventListener("input", function (e) {
-    const searchTerm = e.target.value.toLowerCase(); // Lấy từ khóa tìm kiếm
-    const projectId = getProjectIdFromURL(); // Lấy projectId từ URL
-    const tasks = getTasksForProject(projectId); // Lấy danh sách nhiệm vụ từ dự án
-  
-    if (!searchTerm) {
-      renderTasks(); // Nếu từ khóa tìm kiếm trống, hiển thị toàn bộ danh sách nhiệm vụ
-      return;
-    }
-  
-    // Lọc nhiệm vụ theo tên
-    const filteredTasks = {};
-    Object.keys(tasks).forEach((group) => {
-      filteredTasks[group] = tasks[group].filter((task) =>
-        task.name.toLowerCase().includes(searchTerm)
-      );
+
+  document
+    .getElementById("search-task")
+    .addEventListener("input", function (e) {
+      const searchTerm = e.target.value.toLowerCase(); // Lấy từ khóa tìm kiếm
+      const projectId = getProjectIdFromURL(); // Lấy projectId từ URL
+      const tasks = getTasksForProject(projectId); // Lấy danh sách nhiệm vụ từ dự án
+
+      if (!searchTerm) {
+        renderTasks(); // Nếu từ khóa tìm kiếm trống, hiển thị toàn bộ danh sách nhiệm vụ
+        return;
+      }
+
+      // Lọc nhiệm vụ theo tên
+      const filteredTasks = {};
+      Object.keys(tasks).forEach((group) => {
+        filteredTasks[group] = tasks[group].filter((task) =>
+          task.name.toLowerCase().includes(searchTerm)
+        );
+      });
+
+      renderFilteredTasks(filteredTasks);
     });
-  
-    // Gọi hàm render sau khi tìm kiếm
-    renderFilteredTasks(filteredTasks);
-  });
 
   // Gắn sự kiện cho nút "Hủy"
   cancelTaskBtn.addEventListener("click", closeTaskModal);
@@ -121,7 +116,7 @@ document.addEventListener("DOMContentLoaded", function () {
       if (e.target.classList.contains("edit-btn")) {
         const taskId = parseInt(e.target.dataset.id, 10);
         const projectId = getProjectIdFromURL(); // Lấy projectId từ URL
-      const tasks = getTasksForProject(projectId);
+        const tasks = getTasksForProject(projectId);
         let taskToEdit = null;
 
         // Tìm nhiệm vụ cần sửa trong các nhóm
@@ -137,12 +132,6 @@ document.addEventListener("DOMContentLoaded", function () {
         }
       }
     });
-
-  // Gắn sự kiện cho nút "Hủy"
-  cancelTaskBtn.addEventListener("click", closeTaskModal);
-
-  // Gắn sự kiện cho nút "X"
-  closeTaskBtn.addEventListener("click", closeTaskModal);
 
   // Xử lý khi lưu nhiệm vụ
   taskForm.addEventListener("submit", function (e) {
@@ -165,7 +154,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const taskProgress = taskProgressSelect.value;
 
     const newTask = {
-      id: editingTaskId || Date.now(), // Sử dụng timestamp làm ID nếu thêm mới
+      id: editingTaskId || Math.floor(Math.random() * 10000),
       name: taskName,
       assignee: taskAssignee,
       status: taskStatus,
@@ -174,7 +163,7 @@ document.addEventListener("DOMContentLoaded", function () {
       priority: taskPriority,
       progress: taskProgress,
     };
-    // Reset thông báo lỗi
+
     taskNameError.textContent = "";
     taskAssigneeError.textContent = "";
     taskStatusError.textContent = "";
@@ -250,68 +239,44 @@ document.addEventListener("DOMContentLoaded", function () {
         }
       });
     }
-  
+
     // Thêm nhiệm vụ mới vào nhóm trạng thái
     if (!tasks[taskStatus]) {
       tasks[taskStatus] = [];
     }
-    tasks[taskStatus].push(newTask);
-  
-    // Lưu danh sách nhiệm vụ vào dự án
+
+    tasks[taskStatus].unshift(newTask);
+
     saveTasksForProject(projectId, tasks);
-  
-    // Đóng modal và cập nhật danh sách nhiệm vụ
     closeTaskModal();
     renderTasks();
-  }); 
+  });
 
-  // Gắn sự kiện cho nút "Sửa"
+  // Gắn sự kiện cho nút "Xóa" trong danh sách nhiệm vụ
   document
     .getElementById("task-table-body")
     .addEventListener("click", function (e) {
-      if (e.target.classList.contains("edit-btn")) {
-        const taskId = parseInt(e.target.dataset.id, 10);
-        const tasks = JSON.parse(localStorage.getItem("tasks")) || {};
-        let taskToEdit = null;
+      if (e.target.classList.contains("delete-btn")) {
+        const taskId = parseInt(e.target.dataset.id, 10); // Lấy ID nhiệm vụ từ nút
+        const projectId = getProjectIdFromURL(); // Lấy projectId từ URL
+        const tasks = getTasksForProject(projectId); // Lấy danh sách nhiệm vụ của dự án
 
-        // Tìm nhiệm vụ cần sửa trong các nhóm
+        // Tìm nhiệm vụ cần xóa
+        let taskToDelete = null;
         Object.keys(tasks).forEach((group) => {
           const task = tasks[group].find((t) => t.id === taskId);
           if (task) {
-            taskToEdit = task;
+            taskToDelete = task;
           }
         });
 
-        if (taskToEdit) {
-          openTaskModal(taskToEdit); // Mở modal và truyền dữ liệu nhiệm vụ
+        if (taskToDelete) {
+          showDeleteModal(taskToDelete, projectId);
         }
       }
     });
 
-  // Gắn sự kiện cho nút "Xóa" trong danh sách nhiệm vụ
-  document
-  .getElementById("task-table-body")
-  .addEventListener("click", function (e) {
-    if (e.target.classList.contains("delete-btn")) {
-      const taskId = parseInt(e.target.dataset.id, 10); // Lấy ID nhiệm vụ từ nút
-      const projectId = getProjectIdFromURL(); // Lấy projectId từ URL
-      const tasks = getTasksForProject(projectId); // Lấy danh sách nhiệm vụ của dự án
-
-      // Tìm nhiệm vụ cần xóa
-      let taskToDelete = null;
-      Object.keys(tasks).forEach((group) => {
-        const task = tasks[group].find((t) => t.id === taskId);
-        if (task) {
-          taskToDelete = task;
-        }
-      });
-
-      if (taskToDelete) {
-        showDeleteModal(taskToDelete, projectId); // Hiển thị modal xác nhận xóa
-      }
-    }
-  });
-
+  // Mở danh sách thành viên
   memberList.addEventListener("click", function (e) {
     if (e.target.classList.contains("delete-btn")) {
       const index = e.target.dataset.index;
@@ -327,13 +292,11 @@ document.addEventListener("DOMContentLoaded", function () {
     .addEventListener("click", function () {
       addMemberModal.style.display = "block";
 
-      // Reset thông báo lỗi
       const emailError = document.getElementById("member-email-error");
       const roleError = document.getElementById("member-role-error");
       emailError.textContent = "";
       roleError.textContent = "";
 
-      // Reset form
       addMemberForm.reset();
     });
 
@@ -357,7 +320,7 @@ document.addEventListener("DOMContentLoaded", function () {
     e.preventDefault();
 
     const projectId = getProjectIdFromURL(); // Lấy projectId từ URL
-  const members = getMembersForProject(projectId);
+    const members = getMembersForProject(projectId);
 
     const email = document.getElementById("member-email").value.trim();
     const role = document.getElementById("member-role").value.trim();
@@ -403,20 +366,16 @@ document.addEventListener("DOMContentLoaded", function () {
 
     if (hasError) return;
 
-// Thêm thành viên mới
-members.push({ email, role });
-saveMembersForProject(projectId, members);
-addMemberToAdditionalMembers(email, role);
+    // Thêm thành viên mới
+    members.push({ email, role });
+    saveMembersForProject(projectId, members);
+    addMemberToAdditionalMembers(email, role);
 
-// ✅ Reset form và ẩn modal
-addMemberForm.reset();
-addMemberModal.style.display = "none"; // <-- dòng quan trọng
-
-// Optional: log để kiểm tra
-console.log("Modal đã đóng sau khi lưu");
-
+    addMemberForm.reset();
+    addMemberModal.style.display = "none";
   });
 
+  // Gán sự kiện đóng/mở danh sách thành viên
   const openMemberListModalBtn = document.getElementById(
     "open-member-list-modal"
   );
@@ -426,17 +385,16 @@ console.log("Modal đã đóng sau khi lưu");
   const closeMemberListBtn = document.getElementById("close-member-list-btn");
   const saveMemberBtn = document.getElementById("save-member-btn");
 
+  // Gán sự kiện xóa cho icon trong danh sách thành viên
   memberList.addEventListener("click", function (e) {
     if (e.target.classList.contains("trash-icon")) {
       const index = parseInt(e.target.dataset.index, 10);
       if (!isNaN(index)) {
         tempMembers.splice(index, 1); // Xoá trên mảng tạm
-        renderMembers(tempMembers);   // Render lại danh sách tạm
+        renderMembers(tempMembers); // Render lại danh sách tạm
       }
     }
   });
-  
-  
 
   let tempMembers = []; // Mảng tạm thời chứa danh sách thành viên
 
@@ -447,7 +405,6 @@ console.log("Modal đã đóng sau khi lưu");
     renderMembers(tempMembers);
     memberListModal.style.display = "block";
   });
-  
 
   // Đóng modal danh sách thành viên
   closeMemberListModalBtn.addEventListener("click", function () {
@@ -460,42 +417,43 @@ console.log("Modal đã đóng sau khi lưu");
 
   // Lưu thay đổi danh sách thành viên
   saveMemberBtn.addEventListener("click", function () {
-      const rows = document.querySelectorAll("#member-list tr");
-      const updatedMembers = [];
-  
-      rows.forEach((row) => {
-        const name = row.querySelector(".info p")?.textContent?.trim();
-        const email = row.querySelector(".info span")?.textContent?.trim();
-        const role = row.querySelector("td[contenteditable='true']")?.textContent?.trim();
-  
-        if (email && role) {
-          updatedMembers.push({ name, email, role });
-        }
-      });
-  
-      const projectId = getProjectIdFromURL();
-      const projects = JSON.parse(localStorage.getItem("projects")) || [];
-      const project = projects.find((p) => p.id === parseInt(projectId, 10));
-  
-      if (project) {
-        project.members = updatedMembers;
-        localStorage.setItem("projects", JSON.stringify(projects));
+    const rows = document.querySelectorAll("#member-list tr");
+    const updatedMembers = [];
+
+    rows.forEach((row) => {
+      const name = row.querySelector(".info p")?.textContent?.trim();
+      const email = row.querySelector(".info span")?.textContent?.trim();
+      const role = row
+        .querySelector("td[contenteditable='true']")
+        ?.textContent?.trim();
+
+      if (email && role) {
+        updatedMembers.push({ name, email, role });
       }
-  
-      // Đóng modal
-      memberListModal.style.display = "none";
-  
-      // (Tuỳ chọn) Cập nhật lại danh sách hiển thị chính
-      renderMembers(updatedMembers);
-  
+    });
+
+    const projectId = getProjectIdFromURL();
+    const projects = JSON.parse(localStorage.getItem("projects")) || [];
+    const project = projects.find((p) => p.id === parseInt(projectId, 10));
+
+    if (project) {
+      project.members = updatedMembers;
+      localStorage.setItem("projects", JSON.stringify(projects));
+    }
+
+    // Đóng modal
+    memberListModal.style.display = "none";
+
+    // Cập nhật lại danh sách hiển thị chính
+    renderMembers(updatedMembers);
   });
 
   // Hiển thị danh sách nhiệm vụ khi tải trang
   renderProjectDetails();
   renderTasks();
-
 });
 
+// Chuẩn hóa trạng thái
 function normalizeStatus(status) {
   const statusMap = {
     "to-do": "To do",
@@ -506,6 +464,7 @@ function normalizeStatus(status) {
   return statusMap[status.toLowerCase()] || status; // Trả về trạng thái đã chuẩn hóa
 }
 
+// Lấy project từ URL
 function getProjectFromURL() {
   const queryString = window.location.search;
   const queryParams = queryString.slice(1).split("&");
@@ -523,13 +482,12 @@ function getProjectFromURL() {
     const projects = JSON.parse(localStorage.getItem("projects")) || [];
     return projects.find((project) => project.name === projectName);
   }
-
-  return null; // Trả về null nếu không tìm thấy dự án
 }
 
+// Hiển thị danh sách nhiệm vụ theo nhóm trạng thái
 function renderTasks() {
   const tableBody = document.getElementById("task-table-body");
-  tableBody.innerHTML = ""; // Xóa nội dung cũ
+  tableBody.innerHTML = "";
 
   const projectId = getProjectIdFromURL(); // Lấy projectId từ URL
   const tasks = getTasksForProject(projectId); // Lấy nhiệm vụ của dự án
@@ -595,6 +553,7 @@ function renderTasks() {
   });
 }
 
+// Hiển thị chi tiết thông tin dự án
 function renderProjectDetails() {
   const project = getProjectFromURL();
 
@@ -611,9 +570,11 @@ function renderProjectDetails() {
   }
 }
 
+// Hiển thị người phụ trách nhiệm vụ
 function renderAssignees() {
   const taskAssigneeSelect = document.getElementById("task-assignee");
-  taskAssigneeSelect.innerHTML = '<option value="">Chọn người phụ trách</option>';
+  taskAssigneeSelect.innerHTML =
+    '<option value="">Chọn người phụ trách</option>';
 
   const project = getProjectFromURL();
   const users = JSON.parse(localStorage.getItem("users")) || [];
@@ -637,21 +598,21 @@ function renderAssignees() {
   }
 }
 
-
 // Hiển thị modal xóa
 function showDeleteModal(task, projectId) {
   const deleteModal = document.getElementById("delete-modal");
   const confirmDeleteBtn = document.getElementById("confirm-delete-btn");
   const cancelDeleteBtn = document.getElementById("cancel-delete-btn");
-  const closeDeleteModalBtn = document.querySelector("#delete-modal .close-btn");
+  const closeDeleteModalBtn = document.querySelector(
+    "#delete-modal .close-btn"
+  );
 
-  // Hiển thị modal
   deleteModal.style.display = "block";
 
   // Gắn sự kiện cho nút "Xóa"
   confirmDeleteBtn.onclick = function () {
-    deleteTask(task.id, projectId); // Xóa nhiệm vụ
-    closeDeleteModal(); // Đóng modal
+    deleteTask(task.id, projectId); 
+    closeDeleteModal(); 
   };
 
   // Gắn sự kiện cho nút "Hủy" và nút đóng modal
@@ -686,25 +647,16 @@ function deleteTask(taskId, projectId) {
     tasks[group] = tasks[group].filter((task) => task.id !== taskId);
   });
 
-  // Lưu lại danh sách nhiệm vụ vào dự án
   saveTasksForProject(projectId, tasks);
 
-  // Cập nhật danh sách hiển thị
   renderTasks();
 }
 
-function getAssigneeName(memberId) {
-  const project = getProjectFromURL();
-
-  if (project && Array.isArray(project.members)) {
-    const member = project.members.find(
-      (m) => parseInt(m.id) === parseInt(memberId)
-    );
-    console.log("Found member:", member);
-    if (member) {
-      return member.name || getUserNameByEmail(member.email);
-    }
-  }
+// Lấy tên người phụ trách từ email
+function getAssigneeName(email) {
+  const users = JSON.parse(localStorage.getItem("users")) || [];
+  const user = users.find((u) => u.email === email);
+  if (user) return user.fullName || user.name;
 }
 
 // Mở modal thêm/sửa nhiệm vụ
@@ -716,20 +668,19 @@ function openTaskModal(task = null) {
     // Nếu chỉnh sửa, điền dữ liệu vào form
     editingTaskId = task.id;
     taskNameInput.value = task.name;
-    taskAssigneeSelect.value = String(task.assignee); // Đảm bảo giá trị là chuỗi
+    taskAssigneeSelect.value = String(task.assignee);
     taskStatusSelect.value = task.status;
     taskStartDateInput.value = task.startDate;
     taskEndDateInput.value = task.endDate;
     taskPrioritySelect.value = task.priority;
     taskProgressSelect.value = task.progress;
   } else {
-    // Nếu thêm mới, reset form
     editingTaskId = null;
     taskForm.reset();
   }
 }
 
-// Đóng modal
+// Đóng modal thêm nhiệm vụ
 function closeTaskModal() {
   const taskModal = document.getElementById("task-modal");
   taskModal.style.display = "none";
@@ -746,14 +697,14 @@ function closeTaskModal() {
 // Hiển thị danh sách thành viên
 function renderMembers(members) {
   const memberList = document.getElementById("member-list");
-  memberList.innerHTML = ""; // Xóa danh sách cũ
+  memberList.innerHTML = "";
 
   const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
 
-  // Gán role là "Project Owner" nếu chưa có
+  // Gán role là "Project Owner"
   const owner = {
     ...loggedInUser,
-    role: "Project Owner"
+    role: "Project Owner",
   };
 
   if (!members) {
@@ -796,6 +747,7 @@ function getInitials(email) {
     .join("");
 }
 
+// Lấy tên thành viên từ email
 function getUserNameByEmail(email) {
   const users = JSON.parse(localStorage.getItem("users")) || []; // Lấy danh sách users từ localStorage
 
@@ -825,7 +777,6 @@ function addMemberToAdditionalMembers(email, role) {
     .map((word) => word[0].toUpperCase())
     .join("");
 
-  // Tạo HTML cho thành viên mới
   const memberDiv = document.createElement("div");
   memberDiv.classList.add("member");
   memberDiv.innerHTML = `
@@ -840,7 +791,6 @@ function addMemberToAdditionalMembers(email, role) {
   additionalMembers.appendChild(memberDiv);
 }
 
-
 function getInitialsFromName(name) {
   if (!name) return "?";
 
@@ -849,12 +799,13 @@ function getInitialsFromName(name) {
     .split(" ")
     .map((word) => word[0].toUpperCase())
     .join("")
-    .slice(0, 2); // Lấy 2 ký tự đầu
+    .slice(0, 2);
 }
 
+// Hiển thị danh sách nhiệm vụ đã lọc
 function renderFilteredTasks(filteredTasks) {
   const tableBody = document.getElementById("task-table-body");
-  tableBody.innerHTML = ""; // Xóa nội dung cũ
+  tableBody.innerHTML = "";
 
   Object.keys(filteredTasks).forEach((group) => {
     if (filteredTasks[group].length > 0) {
@@ -904,6 +855,7 @@ function renderFilteredTasks(filteredTasks) {
   });
 }
 
+// Lưu danh sách nhiệm vụ cho dự án
 function saveTasksForProject(projectId, tasks) {
   const projects = JSON.parse(localStorage.getItem("projects")) || [];
   const project = projects.find((p) => p.id === parseInt(projectId, 10));
@@ -914,18 +866,22 @@ function saveTasksForProject(projectId, tasks) {
   }
 }
 
+// Lấy danh sách nhiệm vụ cho dự án
 function getTasksForProject(projectId) {
   const projects = JSON.parse(localStorage.getItem("projects")) || [];
   const project = projects.find((p) => p.id === parseInt(projectId, 10));
 
-  return project?.tasks || {
-    "To do": [],
-    "In Progress": [],
-    "Pending": [],
-    "Done": [],
-  };
+  return (
+    project?.tasks || {
+      "To do": [],
+      "In Progress": [],
+      Pending: [],
+      Done: [],
+    }
+  );
 }
 
+// Lấy projectId từ URL
 function getProjectIdFromURL() {
   const queryString = window.location.search;
   const urlParams = new URLSearchParams(queryString);
@@ -934,51 +890,34 @@ function getProjectIdFromURL() {
   if (!projectName) return null;
 
   const projects = JSON.parse(localStorage.getItem("projects")) || [];
-  const project = projects.find((p) => p.name === decodeURIComponent(projectName));
+  const project = projects.find(
+    (p) => p.name === decodeURIComponent(projectName)
+  );
 
   return project ? project.id : null; // Trả về projectId nếu tìm thấy
 }
 
-// Xóa nếu ko td
-function saveTasksForProject(projectId, tasks) {
-  const projects = JSON.parse(localStorage.getItem("projects")) || [];
-  const project = projects.find((p) => p.id === parseInt(projectId, 10));
-
-  if (project) {
-    project.tasks = tasks; // Gán danh sách nhiệm vụ vào dự án
-    localStorage.setItem("projects", JSON.stringify(projects)); // Lưu lại toàn bộ danh sách dự án
-  }
-}
-
-function getTasksForProject(projectId) {
-  const projects = JSON.parse(localStorage.getItem("projects")) || [];
-  const project = projects.find((p) => p.id === parseInt(projectId, 10));
-
-  return project?.tasks || {
-    "To do": [],
-    "In Progress": [],
-    "Pending": [],
-    "Done": [],
-  };
-}
-
+// Lưu danh sách thành viên cho dự án
 function saveMembersForProject(projectId, members) {
   const projects = JSON.parse(localStorage.getItem("projects")) || [];
   const index = projects.findIndex((p) => p.id === Number(projectId));
 
   if (index !== -1) {
-    // Gán lại danh sách thành viên
     projects[index].members = members;
-
-    // Lưu lại toàn bộ danh sách dự án vào localStorage
     localStorage.setItem("projects", JSON.stringify(projects));
   }
 }
 
-
+// Lấy danh sách thành viên cho dự án
 function getMembersForProject(projectId) {
   const projects = JSON.parse(localStorage.getItem("projects")) || [];
   const project = projects.find((p) => p.id === Number(projectId));
 
-  return project?.members ?? []; // Trả về [] nếu không có
+  return project?.members ?? []; 
+}
+
+function getUserNameByEmail(email) {
+  const users = JSON.parse(localStorage.getItem("users")) || [];
+  const user = users.find((u) => u.email === email);
+  return user.fullName;
 }

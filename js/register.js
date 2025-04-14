@@ -70,7 +70,7 @@ document.addEventListener("DOMContentLoaded", function () {
       const newId = users.length > 0 ? users[users.length - 1].id + 1 : 1;
 
       const newUser = {
-        id: newId, // Gán ID tự động
+        id: newId, 
         fullName: fullNameInput.value.trim(),
         email: emailInput.value.trim(),
         password: passwordInput.value.trim(),

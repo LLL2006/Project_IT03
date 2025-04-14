@@ -1,4 +1,3 @@
-// Biến toàn cục
 const projects = [];
 let currentPage = 1;
 const totalPerPage = 6;
@@ -6,7 +5,6 @@ let filteredProjects = [];
 let projectIdToDelete = null;
 let editingProjectId = null;
 
-// DOM elements
 const modal = document.getElementById("project-modal");
 const deleteModal = document.getElementById("delete-modal");
 const closeButtons = document.querySelectorAll(".close-btn");
@@ -23,7 +21,6 @@ const btnPagesElement = document.querySelector("#btnPages");
 const btnPrevElement = document.querySelector("#btnPrev");
 const btnNextElement = document.querySelector("#btnNext");
 
-// Sự kiện khi tải trang
 document.addEventListener("DOMContentLoaded", function () {
   setupModalEvents();
   setupProjectForm();
@@ -54,27 +51,20 @@ function setupProjectForm() {
     const projects = JSON.parse(localStorage.getItem("projects")) || [];
     const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
 
-    if (!loggedInUser) {
-      alert("Bạn cần đăng nhập.");
-      return;
-    }
-
     if (!validateProject(name, desc, projects, editingProjectId)) return;
 
     if (editingProjectId) {
-      // Cập nhật dự án
       const project = projects.find((p) => p.id === editingProjectId);
       project.name = name;
       project.description = desc;
     } else {
-      // Thêm dự án mới
       const newId = projects.length > 0 ? Math.max(...projects.map((p) => p.id)) + 1 : 1;
-      projects.push({ id: newId, name, description: desc, ownerId: loggedInUser.id });
+      projects.unshift({ id: newId, name, description: desc, ownerId: loggedInUser.id });
     }
 
     localStorage.setItem("projects", JSON.stringify(projects));
     closeModal(modal);
-    location.reload(); // Làm mới trang
+    location.reload();
   });
 
   document.querySelector("tbody").addEventListener("click", function (e) {
@@ -104,7 +94,7 @@ function setupProjectForm() {
     const updated = projects.filter((p) => p.id !== projectIdToDelete);
     localStorage.setItem("projects", JSON.stringify(updated));
     closeModal(deleteModal);
-    location.reload(); // Làm mới trang
+    location.reload(); 
   });
 }
 

@@ -455,8 +455,8 @@ function normalizeStatus(status) {
   const statusMap = {
     "to-do": "To do",
     "in-progress": "In Progress",
-    pending: "Pending",
-    done: "Done",
+    "pending": "Pending",
+    "done": "Done",
   };
   return statusMap[status.toLowerCase()] || status; // Trả về trạng thái đã chuẩn hóa
 }

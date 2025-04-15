@@ -63,7 +63,7 @@ document.addEventListener("DOMContentLoaded", function () {
       Object.keys(sortedTasks).forEach((group) => {
         sortedTasks[group].sort((a, b) => {
           if (sortBy === "priority") {
-            const priorityOrder = { Cao: 1, "Trung bình": 2, Thấp: 3 };
+            const priorityOrder = { "Cao": 1, "Trung bình": 2, "Thấp": 3 };
             return priorityOrder[a.priority] - priorityOrder[b.priority];
           } else if (sortBy === "deadline") {
             return new Date(a.endDate) - new Date(b.endDate);
@@ -110,6 +110,7 @@ document.addEventListener("DOMContentLoaded", function () {
       openTaskModal(); // Mở modal
     });
 
+  // Gắn sự kiện cho nút "Sửa" trong danh sách nhiệm vụ
   document
     .getElementById("task-table-body")
     .addEventListener("click", function (e) {

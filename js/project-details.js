@@ -454,8 +454,8 @@ function normalizeStatus(status) {
   const statusMap = {
     "to-do": "To do",
     "in-progress": "In Progress",
-    "pending": "Pending",
-    "done": "Done",
+    pending: "Pending",
+    done: "Done",
   };
   return statusMap[status.toLowerCase()] || status; // Trả về trạng thái đã chuẩn hóa
 }
@@ -561,8 +561,6 @@ function renderProjectDetails() {
 
     projectTitle.textContent = project.name; // Hiển thị tên dự án
     projectDescriptionElement.textContent = project.description; // Hiển thị mô tả dự án
-  } else {
-    window.location.href = "../pages/project-management.html"; // Điều hướng về trang quản lý dự án
   }
 }
 
@@ -588,7 +586,7 @@ function renderAssignees() {
         displayName = foundUser?.name || foundUser?.fullName || member.email;
       }
 
-      option.textContent = displayName || "Không tên";
+      option.textContent = displayName;
       taskAssigneeSelect.appendChild(option);
     });
   }
@@ -607,8 +605,8 @@ function showDeleteModal(task, projectId) {
 
   // Gắn sự kiện cho nút "Xóa"
   confirmDeleteBtn.onclick = function () {
-    deleteTask(task.id, projectId); 
-    closeDeleteModal(); 
+    deleteTask(task.id, projectId);
+    closeDeleteModal();
   };
 
   // Gắn sự kiện cho nút "Hủy" và nút đóng modal
@@ -871,8 +869,8 @@ function getTasksForProject(projectId) {
     project?.tasks || {
       "To do": [],
       "In Progress": [],
-      "Pending": [],
-      "Done": [],
+      Pending: [],
+      Done: [],
     }
   );
 }
@@ -909,7 +907,7 @@ function getMembersForProject(projectId) {
   const projects = JSON.parse(localStorage.getItem("projects")) || [];
   const project = projects.find((p) => p.id === Number(projectId));
 
-  return project?.members ?? []; 
+  return project?.members ?? [];
 }
 
 function getUserNameByEmail(email) {

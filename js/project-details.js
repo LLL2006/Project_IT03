@@ -733,15 +733,6 @@ function renderMembers(members) {
   });
 }
 
-// Lấy chữ cái đầu từ email
-function getInitials(email) {
-  return email
-    .split("@")[0]
-    .split(".")
-    .map((word) => word[0].toUpperCase())
-    .join("");
-}
-
 // Lấy tên thành viên từ email
 function getUserNameByEmail(email) {
   const users = JSON.parse(localStorage.getItem("users")) || []; // Lấy danh sách users từ localStorage
